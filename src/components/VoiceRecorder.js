@@ -6,6 +6,7 @@ const chunks = [];
 
 const VoiceRecorder = () => {
   const [recording, setRecording] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [audioURL, setAudioURL] = useState(null);
   const [error, setError] = useState(null);
   const [audioFile, setAudioFile] = useState(null);
@@ -54,9 +55,11 @@ const VoiceRecorder = () => {
     formData.append("email", "john@gmail.com");
     formData.append("audio", blobFile);
 
+    setUploading(true);
+
     try {
       const { data } = await axios.post(
-        "http://127.0.0.1:5000/api/music-unison/transcribe-audio",
+        "https://eventnub.onrender.com/api/music-unison/transcribe-audio",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -68,6 +71,8 @@ const VoiceRecorder = () => {
         : error.response.responseText;
       setError(msg);
     }
+
+    setUploading(false);
   };
 
   const resetPage = () => {
@@ -113,7 +118,9 @@ const VoiceRecorder = () => {
         </button>
       </div>
       <div style={{ marginBottom: "1.2em", marginTop: "1.2em" }}>
-        <button onClick={uploadRecording}>Upload</button>
+        <button onClick={uploadRecording} disabled={uploading}>
+          {uploading ? "Uploading" : "Upload"}
+        </button>
         <button onClick={resetPage}>Reset</button>
       </div>
 
