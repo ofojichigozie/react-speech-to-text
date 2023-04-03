@@ -124,7 +124,13 @@ const VoiceRecorder = () => {
         <button onClick={resetPage}>Reset</button>
       </div>
 
-      <p>Transcription: {transcript}</p>
+      {transcript ? (
+        <p>
+          Result: <b>{transcript}</b>
+        </p>
+      ) : (
+        <p>No result</p>
+      )}
     </div>
   );
 };
